@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import css from './style.css';
 import FlipMove from 'react-flip-move';
 
-//Языковые массивы
+//Lang arrays
 const langRu = {
     appAuthor: <div className="app-author">Создатель: <a target="_blank" href="https://ivankorolenko.com" className="app-author__link">Иван Короленко</a></div>,
     appHeader: "Пятнашки",
@@ -23,56 +23,51 @@ const langEn = {
 
 };
 
-/*------------------- Функции -------------------*/
+/*------------------- FUNCTIONS -------------------*/
 
-//Функция определения языка
-//Изменить на реальное определение
 const langDefiner = () => {
     if(navigator.language === "ru") return langRu
     else return langEn
 }
 
-//Функция перемешивания массива
+//Random array shuffling func
 const shuffleArray = arr => arr = arr.sort((a, b) => Math.random() - 0.5);
 
 /* 
-Функции получения номера строки и столбца элемента в двумерном массиве на основе индекса в одномерном массиве
-(работают для любого равностороннего двумерного массива)
+Functions for obtaining the row number and column of an element in a two-dimensional array based on the index in a one-dimensional array
+(works for any equilateral two-dimensional array)
 */
-//Делим номер элемента в массиве на измерение массива (длина строки/колонки) и приводим к ближайшему высшему целому числу
+//Divide the number of the element in the array by the dimension of the array (the length of the line/column) and bring it to the nearest higher integer
 const getRowNumber = (indexInArr, arrDimension) => Math.ceil((indexInArr)/arrDimension);
-//Если индекс больше измерения массива (элемент находится не на первой строке), то вычитаем из индекса измерение, умноженное на номер строки минус единица, иначе просто отдаем индекс 
+//If the index is larger than the dimension of the array (the element is not on the first line), then subtract the dimension multiplied by the line number minus one from the index, otherwise just give the index
 const getColNumber = (indexInArr, arrDimension) => 
       indexInArr > arrDimension ? indexInArr - arrDimension*((Math.ceil((indexInArr)/arrDimension))-1) : indexInArr;
 
-//Функция генерации массива исходного состяния
 function startStateGenerator(size) {
     
-    //Массив стартовых значений
     let startStateArr = [], i = 0;
     
-    //Функция проверки на решаемость
+    //Functions checks generated array for solvability in terms of Puzzle 15 rules
     function checkForSolvability(checkedArr) {
         
         let rowNumberOf16 = 0, 
             chaosParameter = 0;
         
-        //Перебираем все элементы проверяемого массива
         for (i = 0; i < checkedArr.length; i++) {
             
-            //Находим количество элементов в массиве, стоящих после текущего и меньших его по значению. При нахождении увеличиваем переменную хаоса
+            //Find the number of elements in the array, standing after the current and smaller by its value. On every founded element increase the variable of chaos
             for (let j = i + 1; j < checkedArr.length; j++) {
                 if (checkedArr[j] < checkedArr[i]) chaosParameter++;
             }
         }
         
-        //Находим номер строки 16-го элемента в массиве с помощью функции округления до ближайшего максимального целого (например, 0.25 округляется до 1)
+        //Find the line number of the 16th element in the array using the rounding function to the nearest maximum integer (for example, 0.25 is rounded to 1)
         rowNumberOf16 = Math.ceil(((checkedArr.findIndex((elem) => elem === 16))+1)/4);
         
-        //Прибавляем номер строки 16-го элемента к параметру хаотичности
+        //Add the line number of the 16th element to the chaos parameter
         chaosParameter += rowNumberOf16;
         
-        //Если параметр хаотичности четный, то задача решаема, если нечетный, то нерешаема
+        //If the chaos parameter is even, then the problem is solved, if odd, then non-solvable
         if(chaosParameter%2 === 0)
             {
                return true; 
@@ -82,30 +77,27 @@ function startStateGenerator(size) {
         }
     }
 
-    //Заполняем стартовый массив значениями по порядку
+    //Filling array with indexes
     while (++i <= size) startStateArr.push(i);
 
     do {
-        //Перемешиваем массив
+        //Shuffling it
     startStateArr = shuffleArray(startStateArr);
-        //Пока не получаем решаемый
+        //Until we get the solvable one
     } while (checkForSolvability(startStateArr) !== true);
 
     return startStateArr;
     
 }
 
-/*------------------- Функции END -------------------*/
+/*------------------- FUNCTIONS END -------------------*/
 
-/*------------------- Компоненты -------------------*/
+/*------------------- COMPONENTS -------------------*/
 
-//Компонент информации об авторе
 const AppAuthor = props => <h1 className="app-author">{langDefiner().appAuthor}</h1>;
 
-//Компонент заголовка приложения
 const AppHeader = props => <h1 className="app-h1">{langDefiner().appHeader}</h1>;
 
-//Компонент сообщения о победе
 class WinMessage extends Component {
     constructor(props){
         super(props);
@@ -120,8 +112,6 @@ class WinMessage extends Component {
    }   
 }
 
-
-//Компонент ячейки таблицы
 class Cell extends Component {
     constructor(props){
         super(props);
@@ -144,7 +134,6 @@ class Cell extends Component {
   }
 }
 
-//Компонент счетчика ходов
 class MovesCounter extends Component {
     constructor(props){
         super(props);
@@ -155,7 +144,6 @@ class MovesCounter extends Component {
     }
 }
 
-//Компонент счетчика времени
 class TimeCounter extends Component {
     constructor(props){
         super(props);
@@ -166,14 +154,14 @@ class TimeCounter extends Component {
     }
 }
 
-//Компонент игры    
+//Main component of the whole game   
 class PuzzleGame extends Component {
     constructor(props){
         super(props);
         
-        //Изначальное состояние игры
+        //Starting state of the game
         this.state = {
-            //вызываем функцию создания массива ячеек и записываем результат в state
+            //Call the function to create an array of cells and write the result in state
             tableStateNow: this.createCellsArray(),
             gameWinned: false,
             moves: 0,
@@ -197,7 +185,7 @@ class PuzzleGame extends Component {
     );
   }
     
-    //Запуск новой игры
+    //Start the new game func
     refreshGame = () => {
         this.setState(function (prevState, props) {
                 return {
@@ -211,17 +199,17 @@ class PuzzleGame extends Component {
     }
     
     createCellsArray() {
-        //Получаем количество строк и столбцов в создаваемой таблице из переданного параметра
+        
       let size = this.props.size,
         cellsArray = [], i = 0, startStateChunk = [], j = 0;
     
-        //Получаем начальное состояние таблицы
+        //Get an array of numbers that represents starting state of the game
         const startState = startStateGenerator(16);
           
-      //Создаем массив строк с пустышками
+      //Fill array with indexes
         while (++i <= size*size) cellsArray.push(i);
       
-        //Заполняем массив реальными ячейками
+        //Fill it with real cells
         cellsArray = cellsArray.map(cell => 
                                     <Cell 
                                         key={cell} 
@@ -235,19 +223,17 @@ class PuzzleGame extends Component {
         return cellsArray;
     }
     
-    
-    //Событие клика по ячейке
     onCellClick = (e, clickedCellProps) => {
         e.preventDefault();
             
-            //Если это первый ход, то запустить подсчет времени
+            //If it's the first move, start time count
             if (this.state.moves === 0) {
                 this.setTimer();
             }
             
         let isGameWinned = false; 
 
-        //Получаем массив состояния таблицы при клике, копируем его в массив нового состояния, находим в нем 16-й и кликнутый элемент, а также их индексы
+        //Get the state array of the table before the click, copy it to the array of the new state, find 16th and the clicked element in it , as well as their indexes
         let tableWas = this.state.tableStateNow,
             tableWillBe = tableWas.slice(),
             cell16Index = 0, clickedCellIndex = 0,
@@ -260,12 +246,12 @@ class PuzzleGame extends Component {
                 return element.props.cellGameNumber === clickedCellProps.cellGameNumber
             });
         
-        //Берем локационные props для краткости и удобства записи в проверке
+        //Get locational props for more convinient use in upcoming test
         let   c16R = cell16.props.rowNumber, 
               c16C = cell16.props.colNumber,
               ccR = clickedCell.props.rowNumber,
               ccC = clickedCell.props.colNumber,
-            //Создаем элементы, которые заменят имеющиеся при прохождении проверки на правила, с обвнолением props
+            //Create elements, that will replace the current ones if the rules test will be passed, and updating their props accoring to the new state of things in the table
                 newCell16 = React.cloneElement(cell16, {
                     cellLocation: clickedCell.props.cellLocation,
                     positionCorrect: clickedCell.props.cellLocation === cell16.props.cellGameNumber ? true : false,
@@ -280,23 +266,23 @@ class PuzzleGame extends Component {
                 });
 
         /* 
-        Делаем проверку по правилам
-            Перестановка возможна всегда, если соблюдено:
-                1. одно из чисел в локации (строка/столбец) кликнутого элемента совпадает с одним из чисел у 16-го
-                2. второе на единицу строго больше или меньше 
+        Rule check
+             Permutation is always possible, if the following is observed:
+                 1. one of the numbers in the location (row/column) of the clicked element coincides with one of the numbers in the 16th location
+                 2. the second one is strictly greater or less than 16th by one
         */
         if (
         (c16R === ccR && ((c16C === (ccC + 1)) || (c16C === (ccC - 1)))) 
             || 
         (c16C === ccC && ((c16R === (ccR + 1)) || (c16R === (ccR - 1))))
         ) {
-            //Меняем ячейки местами в массиве нового состояния
+            //Swap cells in new state array
             tableWillBe[cell16Index] = newClickedCell;
             tableWillBe[clickedCellIndex] = newCell16;
             
-            //Проверка на выигранную игру. Если все ячейки в новом состоянии таблицы на своих местах, то...
+            //Check for the game won. If all the cells in the new state of the table are in their places, then ...
             if(tableWillBe.length === tableWillBe.filter(element => element.props.positionCorrect === true).length) {
-                //Уведомляем об этом переменную и останавливаем подсчет времени
+                //...notify the variable and stop time counting 
                 isGameWinned = true;
                 clearInterval(this.timerId);
             }
@@ -312,11 +298,11 @@ class PuzzleGame extends Component {
       }
     
   render() {
-      //Добавляем блок победы при рендеринге, если игра выиграна
+      //Add a winning block when rendering if the game is won
       if (this.state.gameWinned !== true) {
           return (
             <FlipMove duration={500} appearAnimation="elevator" leaveAnimation="elevator">
-                {/*Рендерим массив ячеек, записанный в state*/}
+                {/*Render cells array written in state of this component*/}
                 <FlipMove duration={300} appearAnimation="elevator" leaveAnimation="elevator" className="table">
                     { this.state.tableStateNow }
                 </FlipMove>
@@ -330,7 +316,7 @@ class PuzzleGame extends Component {
       else {
           return ( 
               <FlipMove duration={500} appearAnimation="elevator" leaveAnimation="elevator">
-                {/*Рендерим массив ячеек, записанный в state*/}
+                {/*Render cells array written in state of this component*/}
                 <FlipMove duration={300} appearAnimation="elevator" leaveAnimation="elevator" className="table">
                     { this.state.tableStateNow }
                 </FlipMove>
@@ -346,7 +332,6 @@ class PuzzleGame extends Component {
   }     
 }
 
-//Компонент приложения
 class App extends Component {
     constructor(props){
         super(props);
@@ -366,7 +351,7 @@ class App extends Component {
   }
 }
 
-/*------------------- Компоненты END-------------------*/
+/*------------------- COMPONENTS END-------------------*/
 
 ReactDOM.render(
     <App />,
