@@ -1,4 +1,4 @@
-# react-puzzle-15
+# React "Puzzle 15" game
 This is my version of "15 Puzzle" game made with React. 
 
 I hope you will find it fun and/or useful for your project. 
