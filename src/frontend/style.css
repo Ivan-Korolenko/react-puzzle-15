@@ -1,0 +1,274 @@
+/*----------- BASE ---------------*/
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    font-size: 1vw;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+.disabled {
+    pointer-events: none;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.hi {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.vi {
+    opacity: 1 !important;
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+.upper {
+    text-transform: uppercase;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div img {
+    width: 100%;
+    height: auto;
+}
+
+a {
+    outline: none;
+}
+
+button:hover,
+a button:hover,
+button:focus,
+a button:focus {
+    cursor: pointer;
+    outline: none;
+}
+
+
+/*----------- END BASE ---------------*/
+
+
+/*----------- COLORS ---------------*/
+
+.white {
+    color: white;
+}
+
+.black-back {
+    background-color: #333333;
+}
+
+.active-cell {
+    background-color: cornflowerblue;
+}
+
+
+/*----------- END COLORS ---------------*/
+
+
+/*----------- STYLES ---------------*/
+
+.app-container {
+    width: 100vw;
+    min-height:100vh;
+    height: 100%;
+}
+
+.app {
+    justify-content: center;
+    align-items: center;
+}
+
+.app-author {
+    margin: 0.5vw 0 0;
+    font-size: 1.2rem;
+    font-weight: 400; 
+    
+}
+
+.app-author__link {
+    color: white;
+    outline: none;
+    text-decoration: underline;
+    transition: color 0.3s ease-in-out;
+}
+
+.app-author__link:hover {
+    color: #3b2a66;
+}
+
+.app-h1 {
+    padding: 1vw 0;
+    font-size: 2.5rem;
+    font-weight: 400;
+}
+
+.table {
+    display:flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: flex-start;
+    justify-content: center;
+    width: 25vw;
+    height: 25vw;
+    margin: 0 auto;
+}
+
+.cell {
+    user-select: none;
+    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+    font-size: 1.5rem;
+    width: 23%;
+    height: 23%;
+    border: 3px white solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: top, left, background-color 0.3s ease-in-out;
+}
+
+.cell-16 {
+   background-color: white; 
+}
+
+.position-correct {
+    background-color: #3b2a66;
+}
+
+.moves-counter, .time-counter {
+    margin: 1vw;
+    font-size:1.2rem;
+    display: inline-block;
+}
+
+
+.win-block {
+    font-size: 1.2rem;
+    line-height: 2vw;
+}
+
+.win-block__header {
+   font-size: 2rem;
+    margin-bottom: 1vw; 
+}
+    
+
+.win-block__button {
+    background-color: #333333;
+    color: white;
+    border: 3px white solid;
+    border-radius: 5px;
+    padding: 1vw 2vw;
+    font-size: 1.5rem;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.win-block__button:hover {
+    background-color: #3b2a66;
+}
+
+/*----------- MOBILE ---------------*/
+
+@media screen and (max-width:1280px) {
+    html,
+    body {
+        font-size: 2vw;
+    }
+    
+    .app-author {
+    margin: 1vw 0 0;
+    font-size: 2rem;
+}
+
+.app-h1 {
+    padding: 2vw 0 4vw;
+    font-size: 3rem;
+}
+    
+    .table {
+    width: 75vw;
+    height: 75vw;
+}
+    
+    .cell {
+    font-size: 2rem;
+    width: 20%;
+    height: 20%;
+    border: 1px white solid;
+}
+    
+    .counters {
+        margin-top:-4vw;
+    }
+    
+    .moves-counter, .time-counter {
+    margin: 0 1.5vw 2vw;
+    font-size:2rem;
+    display: inline-block;
+}
+
+
+.win-block {
+    font-size: 2rem;
+    line-height: 4vw;
+}
+
+.win-block__header {
+   font-size: 3rem;
+    margin: 2vw 0; 
+}
+    
+
+.win-block__button {
+    background-color: #333333;
+    color: white;
+    border: 1px white solid;
+    border-radius: 5px;
+    padding: 2vw 4vw;
+    margin: 2vw 0;
+    font-size: 2rem;
+    transition: background-color 0.3s ease-in-out;
+}
+    
+}
+
+/*----------- END MOBILE ---------------*/
+
+
+/*----------- END STYLES ---------------*/
